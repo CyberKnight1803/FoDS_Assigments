@@ -17,7 +17,7 @@ class PolynomialRegression():
         """
         Arguments
             X = training inputs of shape (n_x, m)
-            y = labelled output data
+            y = output data
         Returns
             J = Loss  
         """
@@ -28,6 +28,13 @@ class PolynomialRegression():
         return J
 
     def update_params(self, X, y, learning_rate = 0.1, n_iters = 100):
+        """
+        Arguments
+            X = training inputs of shape (n_x, m)
+            y = output data
+            learning_rate = learning rate 
+            n_iters = epochs of the model
+        """
         J_history = []
         m = X.shape[1]
 
