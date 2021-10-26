@@ -3,11 +3,12 @@ from gradientDescent import GD_Variants
 import matplotlib.pyplot as plt 
 
 class PolynomialRegression():
-    def __init__(self, num_features, learning_rate, n_iters):
-
+    def __init__(self, num_features, learning_rate=0.01, n_iters=1000, GD='BatchGD'):
         self.n = num_features 
         self.learning_rate = learning_rate
         self.n_iters = n_iters
+        self.GD_type = GD_Variants[GD](learning_rate)
+        self.costs = []
 
         # Initializing parameters
         self.W = np.zeros((num_features, 1))
@@ -27,7 +28,7 @@ class PolynomialRegression():
         J = (1 / (2 * m)) * np.sum(np.square(y_p.T - y))
         return J
 
-    def update_params(self, X, y, learning_rate = 0.1, n_iters = 100):
+    def update_params(self, X, y):
         """
         Arguments
             X = training inputs of shape (n_x, m)
@@ -35,31 +36,22 @@ class PolynomialRegression():
             learning_rate = learning rate 
             n_iters = epochs of the model
         """
-        J_history = []
-        m = X.shape[1]
+        
+        for epoch in range(self.n_iters):
+            self.GD_type(X, y, self, epoch)
 
-        for i in range(n_iters):
-            y_p = np.dot(self.W.T, X) + self.b
-
-            self.dW = (1 / m) * np.dot(X, y_p.T - y)
-            self.db = (1 / m) * np.sum(y_p.T - y)
-            J_history.append(self.compute_cost(X, y))
-
-            # Update
-            self.W -= learning_rate * self.dW
-            self.b -= learning_rate * self.db
-
-        return J_history
-    
+        return self.costs 
+            
     
 
     def plot_costHistory(self, cost_history):
         plt.plot(cost_history, color='blue')
-        plt.xlabel('Cost')
-        plt.ylabel('No. of Iterations')
+        plt.ylabel('Cost')
+        plt.xlabel('Iterations')
         plt.show()
 
     def train(self, X, y):
-
-        cost_history = self.update_params(X, y, self.learning_rate, self.n_iters)
+        cost_history = self.update_params(X, y)
         self.plot_costHistory(cost_history)
+
+    
