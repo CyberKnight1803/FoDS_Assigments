@@ -1,6 +1,7 @@
 import numpy as np 
+import matplotlib.pyplot as plt
 
-def polynomial_features(X, degree=2, include_bias=True):
+def polynomial_features(X, degree=2, include_bias=False):
     features = X.copy()
     prev_chunk = X
     indices = list(range(len(X)))
@@ -15,22 +16,19 @@ def polynomial_features(X, degree=2, include_bias=True):
         features = np.append(features, new_chunk)
         prev_chunk = new_chunk
 
-    if include_bias :
+    if include_bias:
         features = np.insert(features, 0, 1)
 
-    return features
+    return np.array(features)
 
-def polynomialFeatures(X, degree=2, include_bias=True):
+def polynomialFeatures(X, degree=2, include_bias=False):
     m = X.shape[0]
-    new_features = []
-
-    for i in range(m):
-        x = polynomial_features(X[i], degree, include_bias=True)
-        new_features.append(x)
+    _x = polynomial_features(X[0], degree, include_bias).reshape(-1, 1)
+    for i in range(1, m):
+        x = polynomial_features(X[i], degree, include_bias).reshape(-1, 1)
+        _x = np.hstack((_x, x))
     
-    new_features = np.array(new_features)
-    
-    return new_features.reshape(new_features.shape[1], -1)
+    return _x
 
 
 def train_test_split(X, y, seed=42):
@@ -60,3 +58,9 @@ def standardize(X_train, X_test):
         return X_train, X_test 
  
         
+def MSE_degree_plot(MSE, dataset_type):
+    plt.plot(range(len(MSE)), MSE, 'b-o')
+    plt.xlabel('Degrees')
+    plt.ylabel('MSE')
+    plt.title(f'{dataset_type} MSE vs Degrees')
+    plt.grid()

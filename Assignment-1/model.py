@@ -3,10 +3,11 @@ from gradientDescent import GD_Variants
 import matplotlib.pyplot as plt 
 
 class PolynomialRegression():
-    def __init__(self, num_features, learning_rate=0.01, n_iters=1000, GD='BatchGD'):
+    def __init__(self, num_features, degree=1, learning_rate=0.01, epochs=1000, GD='BatchGD'):
         self.n = num_features 
+        self.degree = degree
         self.learning_rate = learning_rate
-        self.n_iters = n_iters
+        self.epochs = epochs
         self.GD_type = GD_Variants[GD](learning_rate)
         self.costs = []
 
@@ -22,12 +23,15 @@ class PolynomialRegression():
         Returns
             J = Loss  
         """
-
-        m = X.shape[1]                                             # No. of training examples
-        y_p = np.dot(self.W.T, X) + self.b
+        m = X.shape[1] 
+        if self.degree:                                            # No. of training examples
+            y_p = np.dot(self.W.T, X) + self.b
+        else:
+            y_p = self.b
+        
         J = (1 / (2 * m)) * np.sum(np.square(y_p.T - y))
         return J
-
+        
     def update_params(self, X, y):
         """
         Arguments
@@ -37,7 +41,7 @@ class PolynomialRegression():
             n_iters = epochs of the model
         """
         
-        for epoch in range(self.n_iters):
+        for epoch in range(self.epochs):
             self.GD_type(X, y, self, epoch)
 
         return self.costs 
@@ -54,4 +58,12 @@ class PolynomialRegression():
         cost_history = self.update_params(X, y)
         self.plot_costHistory(cost_history)
 
+    def evaluate(self, X, y):
+        if self.degree:
+            y_p = np.dot(self.W.T, X) + self.b 
+        else:
+            y_p = self.b 
+        
+        cost = self.compute_cost(X, y)
+        return cost 
     
