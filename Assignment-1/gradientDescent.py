@@ -26,6 +26,9 @@ class BatchGD(GD):
             y_p = np.array([model.b]).reshape(-1, 1) 
             model.db = (1 / m) * np.sum(y_p.T - y)
 
+        if model.regularizer == 'L2':
+            model.dW += (model.gamma * model.W)
+
         self.update(model)
 
         cost = model.compute_cost(X, y)
@@ -51,13 +54,17 @@ class StochasticGD(GD):
             else:
                 y_p = np.array(model.b).reshape(-1, 1)
                 model.db = np.sum(y_p.T - y[i, :]).reshape(-1, 1)
+            
+            if model.regularizer == 'L2':
+                model.dW += (model.gamma * model.W)
+            
+            if model.regularizer == 'L1':
+                model.dW += (model.gamma * np.sign(model.W))
             self.update(model)
 
             cost = model.compute_cost(X[:, i].reshape(-1, 1), y[i, :].reshape(1, -1))
             model.costs.append(cost)
             final_epoch_cost = cost
-        
-        # model.costs.append(final_epoch_cost)
         
         if print_cost:
             print(f"Cost after epoch {itr + 1}: {final_epoch_cost}")

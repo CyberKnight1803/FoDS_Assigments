@@ -58,9 +58,9 @@ def standardize(X_train, X_test):
         return X_train, X_test 
  
         
-def MSE_degree_plot(MSE, dataset_type):
+def MSE_degree_plot(MSE, dataset_type, GD):
     plt.plot(range(len(MSE)), MSE, 'b-o')
     plt.xlabel('Degrees')
     plt.ylabel('MSE')
-    plt.title(f'{dataset_type} MSE vs Degrees')
+    plt.title(f'{dataset_type} MSE vs Degrees using {GD}')
     plt.grid()

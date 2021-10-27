@@ -3,14 +3,15 @@ from gradientDescent import GD_Variants
 import matplotlib.pyplot as plt 
 
 class PolynomialRegression():
-    def __init__(self, num_features, degree=1, learning_rate=0.01, epochs=1000, GD='BatchGD'):
+    def __init__(self, num_features, degree=1, learning_rate=0.01, epochs=1000, GD='BatchGD', regularizer=None, gamma=0.9):
         self.n = num_features 
         self.degree = degree
         self.learning_rate = learning_rate
         self.epochs = epochs
         self.GD_type = GD_Variants[GD](learning_rate)
         self.costs = []
-
+        self.regularizer = regularizer
+        self.gamma = gamma
         # Initializing parameters
         self.W = np.zeros((num_features, 1))
         self.b = 0
@@ -30,6 +31,13 @@ class PolynomialRegression():
             y_p = self.b
         
         J = (1 / (2 * m)) * np.sum(np.square(y_p.T - y))
+
+        if self.regularizer == 'L1':
+            J += self.gamma * np.sum(np.abs(self.W))
+
+        if self.regularizer == 'L2':
+            J += (self.gamma / 2) * (np.sum(np.square(self.W)))
+        
         return J
         
     def update_params(self, X, y):
