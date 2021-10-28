@@ -1,5 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+from model import PolynomialRegression
 
 def polynomial_features(X, degree=2, include_bias=False):
     features = X.copy()
@@ -64,3 +65,23 @@ def MSE_degree_plot(MSE, dataset_type, GD):
     plt.ylabel('MSE')
     plt.title(f'{dataset_type} MSE vs Degrees using {GD}')
     plt.grid()
+
+def plot_RMSE_loglam(X, y, degree_=9):
+    gammas = np.array([0.01, 0.15, 0.36, 0.45, 0.57, 0.69, 0.78, 0.87, 0.99])
+    ERMS = []
+    ERMS_test = []
+
+    X_new = polynomialFeatures(X, degree=degree_)
+    X_train, X_test, y_train, y_test = train_test_split(X_new, y, 42)
+    X_train, X_test = standardize(X_train, X_test) 
+
+    for i in range(gammas.size):
+        pr = PolynomialRegression(X_train.shape[0], degree=9, learning_rate=0.001, epochs=1800, regularizer='L2', gamma=gammas[i])
+        pr.train(X_train, y_train)
+
+        test_mse = pr.evaluate(X_test, y_test)
+        ERMS_test.append(np.sqrt(2 * test_mse / X_test.shape[1]))
+        ERMS.append(np.sqrt(2 * pr.costs[-1] / X_train.shape[1]))
+    
+    plt.plot(np.log(gammas), ERMS)
+    plt.plot(np.log(gammas), ERMS_test)
