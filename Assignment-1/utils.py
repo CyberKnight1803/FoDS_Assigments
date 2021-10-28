@@ -67,7 +67,7 @@ def MSE_degree_plot(MSE, dataset_type, GD):
     plt.grid()
 
 def plot_RMSE_loglam(X, y, degree_=9):
-    gammas = np.array([0.01, 0.15, 0.36, 0.45, 0.57, 0.69, 0.78, 0.87, 0.99])
+    gammas = np.array([0.001, 0.021, 0.056, 0.094, 0.157, 0.369, 0.578, 0.787, 0.99])
     ERMS = []
     ERMS_test = []
 
@@ -83,5 +83,5 @@ def plot_RMSE_loglam(X, y, degree_=9):
         ERMS_test.append(np.sqrt(2 * test_mse / X_test.shape[1]))
         ERMS.append(np.sqrt(2 * pr.costs[-1] / X_train.shape[1]))
     
-    plt.plot(np.log(gammas), ERMS)
-    plt.plot(np.log(gammas), ERMS_test)
+    plt.plot(np.log(gammas), ERMS, c='r')
+    plt.plot(np.log(gammas), ERMS_test, c='b')
