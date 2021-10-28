@@ -26,6 +26,9 @@ class BatchGD(GD):
             y_p = np.array([model.b]).reshape(-1, 1) 
             model.db = (1 / m) * np.sum(y_p.T - y)
 
+        if model.regularizer == 'L1':
+            model.dW += (model.gamma * np.sign(model.W))
+
         if model.regularizer == 'L2':
             model.dW += (model.gamma * model.W)
 

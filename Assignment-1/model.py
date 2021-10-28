@@ -40,7 +40,7 @@ class PolynomialRegression():
         
         return J
         
-    def update_params(self, X, y):
+    def update_params(self, X, y, print_cost=True):
         """
         Arguments
             X = training inputs of shape (n_x, m)
@@ -50,7 +50,7 @@ class PolynomialRegression():
         """
         
         for epoch in range(self.epochs):
-            self.GD_type(X, y, self, epoch)
+            self.GD_type(X, y, self, epoch, print_cost)
 
         return self.costs 
             
@@ -61,9 +61,11 @@ class PolynomialRegression():
         plt.xlabel('Iterations')
         plt.show()
 
-    def train(self, X, y):
-        cost_history = self.update_params(X, y)
-        self.plot_costHistory(cost_history)
+    def train(self, X, y, print_cost=True, plot_loss_curves=True):
+        cost_history = self.update_params(X, y, print_cost)
+
+        if plot_loss_curves:
+            self.plot_costHistory(cost_history)
 
     def evaluate(self, X, y):
         if self.degree:
