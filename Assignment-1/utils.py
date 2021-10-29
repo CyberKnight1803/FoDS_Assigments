@@ -77,7 +77,7 @@ def plot_RMSE_loglam(X, y, degree_=9):
 
     for i in range(gammas.size):
         pr = PolynomialRegression(X_train.shape[0], degree=9, learning_rate=0.001, epochs=1800, regularizer='L2', gamma=gammas[i])
-        pr.train(X_train, y_train)
+        pr.train(X_train, y_train, print_cost=False, plot_loss_curves=False)
 
         test_mse = pr.evaluate(X_test, y_test)
         ERMS_test.append(np.sqrt(2 * test_mse / X_test.shape[1]))
