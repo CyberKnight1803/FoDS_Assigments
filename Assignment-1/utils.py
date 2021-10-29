@@ -66,7 +66,7 @@ def MSE_degree_plot(MSE, dataset_type, GD):
     plt.title(f'{dataset_type} MSE vs Degrees using {GD}')
     plt.grid()
 
-def plot_RMSE_loglam(X, y, degree_=9):
+def plot_RMSE_loglam(X, y, degree_=9, learning_rate=0.001, epochs=1800, GD='BatchGD', regularizer='L2'):
     gammas = np.array([0.001, 0.011, 0.021, 0.039, 0.056, 0.069, 0.077, 0.094, 0.109, 0.125, 0.157, 0.250, 0.369, 0.444, 0.578, 0.696, 0.787, 0.861, 0.912, 0.99])
     ERMS = []
     ERMS_test = []
@@ -76,7 +76,7 @@ def plot_RMSE_loglam(X, y, degree_=9):
     X_train, X_test = standardize(X_train, X_test) 
 
     for i in range(gammas.size):
-        pr = PolynomialRegression(X_train.shape[0], degree=9, learning_rate=0.001, epochs=1800, regularizer='L2', gamma=gammas[i])
+        pr = PolynomialRegression(X_train.shape[0], degree=degree_, learning_rate=learning_rate, epochs=epochs, regularizer=regularizer, gamma=gammas[i])
         pr.train(X_train, y_train, print_cost=False, plot_loss_curves=False)
 
         test_mse = pr.evaluate(X_test, y_test)
