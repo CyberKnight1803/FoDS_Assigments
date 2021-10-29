@@ -67,7 +67,7 @@ def MSE_degree_plot(MSE, dataset_type, GD):
     plt.grid()
 
 def plot_RMSE_loglam(X, y, degree_=9, learning_rate=0.001, epochs=1800, GD='BatchGD', regularizer='L2'):
-    gammas = np.array([0.001, 0.011, 0.021, 0.039, 0.056, 0.069, 0.077, 0.094, 0.109, 0.125, 0.157, 0.250, 0.369, 0.444, 0.578, 0.696, 0.787, 0.861, 0.912, 0.99])
+    gammas = np.array([9.357623e-14, 2.06115362e-9, 0.00004539, 0.011, 0.109, 0.578, 0.99, 50])
     ERMS = []
     ERMS_test = []
 
@@ -85,3 +85,9 @@ def plot_RMSE_loglam(X, y, degree_=9, learning_rate=0.001, epochs=1800, GD='Batc
     
     plt.plot(np.log(gammas), ERMS, c='r')
     plt.plot(np.log(gammas), ERMS_test, c='b')
+    plt.xlabel('log λ')
+    plt.ylabel('RMSE')
+    SubGD = 'GD' if GD == 'BatchGD' else 'SGD'
+    plt.title(f'{SubGD} RMSE vs log λ')
+    print(ERMS)
+    print(ERMS_test)    
