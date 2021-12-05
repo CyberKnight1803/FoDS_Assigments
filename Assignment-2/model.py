@@ -57,11 +57,14 @@ class LinearRegression():
         plt.xlabel('Iterations')
         plt.show()
 
-    def train(self, X, y, print_cost=True, plot_loss_curves=True):
+    def train(self, X, y, print_cost=True, plot_loss_curves=True, ret_final_cost=False):
         cost_history = self.update_params(X, y, print_cost)
 
         if plot_loss_curves:
             self.plot_costHistory(cost_history)
+        
+        if ret_final_cost:
+            return cost_history[-1]
 
     def evaluate(self, X, y):
         cost = self.compute_cost(X, y)
